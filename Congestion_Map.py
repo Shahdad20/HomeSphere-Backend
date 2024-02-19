@@ -1,7 +1,10 @@
+from flask import Flask, jsonify
+from flask_cors import CORS  # Import CORS
 import pandas as pd
-import geopandas as gpd
 import plotly.express as px
 
+app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 property_value_data = pd.read_csv(
     "Current_Year_Property_Assessments__Parcel__20231018.csv"
@@ -42,5 +45,21 @@ fig = px.choropleth(
 
 fig.update_geos(center_lon=-114.0719, center_lat=51.0447, projection_scale=450)
 
+# Endpoint to get community vacancy map data
+@app.route('/api/community_map')
+def get_community_map():
+    # Return the map data as JSON
+    return jsonify(fig.to_json())
+
+# Endpoint to get congestion map data
+@app.route('/api/congestion_map')
+def get_congestion_map():
+    # Replace this with code to generate congestion map data
+    # For now, I'll just return a sample response
+    congestion_map_data = {"message": "This is the congestion map data"}
+    return jsonify(congestion_map_data)
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 fig.show()

@@ -1,2 +1,0 @@
-Required CSV file can be found and downloaded from: https://drive.google.com/drive/folders/1cg6clZmRDTdv7FM1XgmO-EorLTTrnnG4?usp=drive_link
-In order to run this code, download CSV files and the py file into a folder and run the py file

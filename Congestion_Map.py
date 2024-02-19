@@ -54,8 +54,6 @@ def get_community_map():
 # Endpoint to get congestion map data
 @app.route('/api/congestion_map')
 def get_congestion_map():
-    # Replace this with code to generate congestion map data
-    # For now, I'll just return a sample response
     congestion_map_data = {"message": "This is the congestion map data"}
     return jsonify(congestion_map_data)
 

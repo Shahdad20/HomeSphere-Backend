@@ -3,7 +3,7 @@ from flask_cors import CORS  # Import CORS
 import pandas as pd
 import plotly.express as px
 
-app = Flask(__name__, static_folder="../HomeSphere-Frontend/HomeSphere-frontend/my-app/build", static_url_path='/')
+app = Flask(__name__, static_folder="../HomeSphere-Frontend/HomeSphere-frontend/my-app/public/build", static_url_path='/')
 
 CORS(app)  # Enable CORS for all routes
 

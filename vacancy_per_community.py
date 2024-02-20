@@ -1,12 +1,11 @@
+from flask import Flask, jsonify, render_template
+from flask_cors import CORS  # Import CORS
 import pandas as pd
 import plotly.express as px
 
-mapbox_access_token = "pk.eyJ1Ijoia2FhamJvbGFuZCIsImEiOiJjbG5kejg0emIwOGRyMmxsZW9vaXYyMGswIn0.Rhnj7A5aOZh0JBebF4WaFQ"
+app = Flask(__name__, static_folder="../HomeSphere-Frontend/HomeSphere-frontend/my-app/public/build", static_url_path='/')
 
-
-# List of Used City of Calgary Datasets:
-# Building Permits Dataset
-# Census by Community 2019 (Updated: February 1, 2023)
+CORS(app)  # Enable CORS for all routes
 
 # API URLs for building permits and vacant apartments data
 building_permits_api_url = "https://data.calgary.ca/resource/c2es-76ed.json"
@@ -28,7 +27,7 @@ fig = px.scatter_mapbox(
     df_merged,
     lat="latitude",
     lon="longitude",
-    color="communityname",
+    color="apt_vacant",
     size_max=15,
     hover_name="communityname",  # Show communityname in hover information
     hover_data={
@@ -46,17 +45,31 @@ fig = px.scatter_mapbox(
     mapbox_style="mapbox://styles/mapbox/streets-v11",  # You can change the map style
     opacity=0.6,
     title="Calgary Building Permits Heat Map with Vacant Homes Availability",
+    color_continuous_scale=px.colors.sequential.Rainbow,
 )
 
 # Update Mapbox layout
 fig.update_layout(
     mapbox=dict(
-        accesstoken=mapbox_access_token,
-    )
+        accesstoken="pk.eyJ1Ijoia2FhamJvbGFuZCIsImEiOiJjbG5kejg0emIwOGRyMmxsZW9vaXYyMGswIn0.Rhnj7A5aOZh0JBebF4WaFQ",
+    ),
+    coloraxis_colorbar=dict(title="Community Vacancies"),
+    coloraxis=dict(colorbar=dict(title="Community Vacancies")),
 )
 
-# Show the interactive plot directly in a web browser (Firefox or Chrome)
-fig.show()
+# Serve the React app
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-# Write the plot into an HTML file which can be copied and opened at a desired time.
-# fig.write_html("calgary_building_permits_map.html")
+# Endpoint to get community vacancy map data
+@app.route('/api/community_vacancy')
+def get_community_map():
+    # Return the map data as JSON
+    response = jsonify(fig.to_json())
+    # Allow requests from any origin
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+if __name__ == '__main__':
+    app.run(debug=True, port=3000)

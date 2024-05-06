@@ -1,6 +1,6 @@
 folium==0.15.1
 geopandas==0.14.3
-ipython==7.34.0
+ipython==8.10.0
 ipywidgets==8.0.3
 mapboxgl==0.10.2
 markupsafe==2.1.3
